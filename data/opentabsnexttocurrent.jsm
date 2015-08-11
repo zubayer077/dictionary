@@ -58,11 +58,6 @@ function OpenTabsNextToCurrent() {
 	
 	this.onTabSelect = function(anEvent){
 		if (!this.busy){
-			// var tab = anEvent.target;
-			// for (var i= 0; i< this.currentTab.length; ++i){
-				// if(this.currentTab[i]["visibleLabel"] == tab["visibleLabel"])
-					// this.currentTab.splice(i, 1);
-			// }
 			this.currentTab.push(this.gBrowser.mCurrentTab);
 		}
 	}.bind(this);
