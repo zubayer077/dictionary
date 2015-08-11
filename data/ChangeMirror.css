@@ -1,0 +1,17 @@
+.CodeMirror {
+	font-family: Monaco, monospace;
+	border-top: 1px solid black; border-bottom: 1px solid black;
+	font-size: 12px;
+	line-height: 150%;
+	height: auto;
+}
+.CodeMirror-scroll {
+	overflow-y: hidden;
+	overflow-x: auto;
+}
+.CodeMirror-focused .cm-matchhighlight {
+	background: rgba(255, 0, 0, 1);
+}
+.CodeMirror-matchingbracket{
+	background-color:rgba(255, 0, 0, .8);
+}
