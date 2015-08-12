@@ -62,17 +62,13 @@ function OpenTabsNextToCurrent() {
 			if (!currTab.hasAttribute("tabId")){
 				currTab.setAttribute("tabId", ++this.tabId);
 			}
-			
 			this.currentTab.push(this.gBrowser.mCurrentTab);
 		}
 	}.bind(this);
 	
 	this.deleteFromStack = function(target){
-		for (var i= 0; i< this.currentTab.length; ++i){
-			var currTab = this.currentTab[i];
-			if( currTab.hasAttribute("tabId") && (currTab.getAttribute("tabId") == target.getAttribute("tabId"))){
-				this.currentTab.splice(i,1);
-			}
+		for (var i= 0; target.hasAttribute("tabId") && i< this.currentTab.length; ++i){
+			if(this.currentTab[i].getAttribute("tabId") == target.getAttribute("tabId")) this.currentTab.splice(i,1);
 		}
 	};
 }
