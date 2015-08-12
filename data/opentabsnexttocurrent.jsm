@@ -6,6 +6,7 @@ EXPORTED_SYMBOLS = ["OpenTabsNextToCurrent"];
 function OpenTabsNextToCurrent() {
     this.busy = false;
 	this.currentTab = [];
+	this.tabId = 100;
     this.initialize = function(domWindow) {
         if (!domWindow ||
             !domWindow.gBrowser ||
@@ -49,16 +50,29 @@ function OpenTabsNextToCurrent() {
 	
 	this.onTabClose = function(anEvent) {
 		if (!this.busy){
-			var currentTab = this.currentTab.pop();
-			if(currentTab["visibleLabel"] == anEvent.target["visibleLabel"])
-				currentTab = this.currentTab.pop();
-			this.gBrowser.selectedTab = currentTab;
+			this.deleteFromStack(anEvent.target);
+			this.gBrowser.selectedTab = this.currentTab.pop();
 		}
     }.bind(this);
 	
 	this.onTabSelect = function(anEvent){
 		if (!this.busy){
+			var currTab = anEvent.target;
+			this.deleteFromStack(currTab);
+			if (!currTab.hasAttribute("tabId")){
+				currTab.setAttribute("tabId", ++this.tabId);
+			}
+			
 			this.currentTab.push(this.gBrowser.mCurrentTab);
 		}
 	}.bind(this);
+	
+	this.deleteFromStack = function(target){
+		for (var i= 0; i< this.currentTab.length; ++i){
+			var currTab = this.currentTab[i];
+			if( currTab.hasAttribute("tabId") && (currTab.getAttribute("tabId") == target.getAttribute("tabId"))){
+				this.currentTab.splice(i,1);
+			}
+		}
+	};
 }
