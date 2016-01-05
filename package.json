@@ -1,10 +1,10 @@
 {
   "name": "dictionary",
   "title": "dictionary",
-  "id": "jid1-wZnkeY5f6VWEbQ",
+  "id": "@jetpackjid1-wZnkeY5f6VWEbQ",
   "description": "a basic add-on",
   "author": "",
   "license": "MPL 2.0",
-  "version": "0.1",
+  "version": "0.1.1",
 "permissions": {"private-browsing": true}
 }
