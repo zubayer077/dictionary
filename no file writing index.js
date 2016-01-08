@@ -8,9 +8,12 @@ tabs.on("ready", runScript);
 
 var {Cc, Ci, Cu} = require("chrome");
 	Cu.import('resource://gre/modules/Services.jsm');
-var {FileUtils} = Cu.import("resource://gre/modules/FileUtils.jsm"),
-	file = Cc['@mozilla.org/file/local;1'].createInstance(Ci.nsILocalFile);
-	file.initWithPath('C:\\Hotkey Scripts\\temp.txt');
+
+var file = Cc["@mozilla.org/file/local;1"].createInstance(Ci.nsIFile),
+	process = Cc["@mozilla.org/process/util;1"].createInstance(Ci.nsIProcess);
+	
+file.initWithPath("c:\\Hotkey Scripts\\sender.exe");
+process.init(file);
 
 
 let windows = Services.wm.getEnumerator("navigator:browser"), domWindow = undefined, tabId = 0;
@@ -27,20 +30,8 @@ new OpenTabsNextToCurrent().initialize(domWindow);
 
 
 function writeToFile(message){
-	if(!file.exists()){
-		file.create(file.NORMAL_FILE_TYPE, 0666);
-	}
-
-	var charset = 'UTF-8';
-	var fileStream = Cc['@mozilla.org/network/file-output-stream;1'].createInstance(Ci.nsIFileOutputStream);
-	fileStream.init(file, FileUtils.MODE_WRONLY | FileUtils.MODE_CREATE | FileUtils.MODE_APPEND, 0x200, false);
-
-	var converterStream = Cc['@mozilla.org/intl/converter-output-stream;1'].createInstance(Ci.nsIConverterOutputStream);
-
-	converterStream.init(fileStream, charset, message.length, Ci.nsIConverterInputStream.DEFAULT_REPLACEMENT_CHARACTER);
-	converterStream.writeString(message);
-	converterStream.close();
-	fileStream.close();
+	// process.run(false, [message], 1);
+	process.runAsync([message], 1);
 }
 
 

@@ -91,8 +91,8 @@ function searchChild(searchCh){
 
 function readAloud(elem){
 	var text = elem.textContent;
-   	text = text.replace(regex, "");
-   	self.postMessage(foldToASCII(text));
+		text = foldToASCII(text.replace(regex, ""));
+   	self.postMessage(text);
 	return;
 }
 
@@ -125,20 +125,21 @@ body.addEventListener("keydown", function(event){
 		if(event.ctrlKey || event.altKey || isInput(node))
 			return;
 		stopPropagation(event);
-		var paragraph, elementTop, inner = window.innerHeight;
+		var paragraph, elementTop, text, inner = window.innerHeight, innerThird = Math.floor(inner/3);
 		while(paragraphArray.length>0 && 
-			(!elementTop || (elementTop.top<Math.floor(inner/3) && !(elementTop.bottom>Math.floor(inner/3))))){
+			((!text || (""+text).length<4) || (!elementTop || (elementTop.top<innerThird && !(elementTop.bottom>innerThird))))){
 			try{
 				paragraph = paragraphArray.shift();
-				elementTop = paragraph.getBoundingClientRect();
+				text = foldToASCII((paragraph.textContent).replace(regex, "")) || undefined;
+				elementTop = paragraph.getBoundingClientRect() || undefined;
 			} catch (err){}
 		}
 		
 		if (paragraph){
 			readAloud(paragraph);
-			var windowHeight = inner/2;
-			if (elementTop.top > windowHeight && elementTop.bottom > inner){
-				window.scrollBy(0, Math.floor(elementTop.top - windowHeight));
+			var innerHalf = inner/2;
+			if (elementTop.top > innerHalf && elementTop.bottom > inner){
+				window.scrollBy(0, Math.floor(elementTop.top - innerHalf));
 			}
 		} else {
 			window.scrollBy(0, Math.floor((2*inner)/3));
@@ -192,34 +193,6 @@ body.addEventListener("keydown", function(event){
 	);
 	
 if (new RegExp("/*.reference.com|dictionary.com/").test((""+window.location))){
-	[].forEach.call(
-		document.querySelectorAll(".nmre, span.qc"), 
-		function(el){
-			if ((el.hasAttribute && (""+el.getAttribute("id")).indexOf("more")==0) || (el.parentNode && el.parentNode.nodeName == "DIV"))
-				el.style?el.style.display = "none":"";
-		});
-	[].forEach.call(
-		document.querySelectorAll(".txt"),
-		function(elem){
-			if (elem.hasAttribute && (""+elem.getAttribute("id")).indexOf("dots")==0)
-				elem.parentNode.removeChild(elem);
-			else{
-				textElem = elem;
-				while (elem.nextSibling){
-					elem = elem.nextSibling;
-					if (elem.hasAttribute && elem.getAttribute("class") == "gtxt"){
-						textElem.innerHTML = ""+textElem.innerHTML + elem.innerHTML;
-						break;
-					}
-				}
-			}
-		});
-	
 	setTimeout(function(){document.querySelectorAll("input#q")[0].blur();},500);
-	if (document.querySelectorAll("#exsntBlock>a.more")[0])
-		document.querySelectorAll("#exsntBlock>a.more")[0].click();
-	if (document.querySelectorAll("#exsntBlock>a.less")[0])
-		document.querySelectorAll("#exsntBlock>a.less")[0].style.display="none";
 }
-
 })();
