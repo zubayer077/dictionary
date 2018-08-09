@@ -52,3 +52,73 @@ var request = require('request'),
                         VoiceId: "Salli", // Specify the voice ID / name from the previous step.
                 }, res);
         }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        var pollyHandler = (function () {
+    var elementId = "audioElement" + new Date().valueOf().toString();
+    var audioElement = document.createElement('audio'),
+        spokenText = "",
+        spokenFailed = false, 
+        isSpeaking = false,
+        errorListener = function (event){
+            if (audioElement.error.code == 4){
+                spokenFailed = true;
+                pollyHandler.speak(spokenText);
+            }
+        };
+    audioElement.setAttribute("id", elementId);
+    document.body.appendChild(audioElement);	
+    audioElement.addEventListener("ended", function () {
+        audioElement.removeEventListener('error', errorListener);
+        isSpeaking = false;
+        audioElement.currentTime = 0;
+        audioElement.src = undefined;
+    });
+
+    return {
+        speak: function speak(text) {
+            if (spokenFailed){
+                self.port.emit("speak-failure", text);
+            } else {
+                spokenText = text;
+                self.postMessage(text);
+            }
+        },
+        play: function play(Data) {
+            audioElement.addEventListener('error', errorListener)
+            isSpeaking = true;
+            audioElement.src = "data:audio/mp3;base64,"+Data
+            audioElement.play();
+        },
+        stop: function stop() {				
+            if(audioElement){
+                audioElement.removeEventListener('error', errorListener);
+                isSpeaking = false;
+                audioElement.pause();
+                audioElement.currentTime = 0;
+                audioElement.src = undefined;
+            }
+        },
+        toggle: function toggle() {		
+            if(isSpeaking){
+                audioElement.pause();
+                isSpeaking = false;
+            } else {
+                audioElement.play();
+                isSpeaking = true
+            }
+        }
+    }
+})()
+
+self.port.on("play", pollyHandler.play);
+self.port.on("stop", pollyHandler.stop);
+self.port.on("toggle", pollyHandler.toggle);
+
