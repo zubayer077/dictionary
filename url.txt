@@ -12,3 +12,43 @@ https://chrome.google.com/webstore/detail/minishortcut/dhfmbjpmakffkpepaeeoenabl
 
 previous allowed_origins
 "chrome-extension://nfkpmkbfmgbfongnfdihnmapmcdngcbd/"
+
+
+// polly user password Y4GJY0Ch6TDl
+AWS.config = new AWS.Config({
+        accessKeyId: "AKIAIYSGUUET4LVGAD7Q",
+        secretAccessKey: "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",
+        region: "us-east-2"
+});
+
+var polly = new AWS.Polly();
+
+
+const say = (msg, res) => {
+        const synthCallback = (err, data) => {
+          if (err) debug(err.stack); // an error occurred
+          const bufferStream = new stream.PassThrough();
+          // Write your buffer
+          bufferStream.end(new Buffer(data.AudioStream));
+          res.set({
+                'Content-Type': 'audio/mpeg',
+          });
+          bufferStream.on('error', bufferError => {
+                debug(bufferError);
+                res.status(400).end();
+          });
+          // Pipe it to something else  (i.e. stdout)
+          bufferStream.pipe(res);
+        };
+        polly.synthesizeSpeech(msg, synthCallback);
+  };
+
+var request = require('request'),
+        _self = function (req, res) {
+                let Text = req.body.text;
+                say({
+                        OutputFormat: 'mp3', // You can also specify pcm or ogg_vorbis formats.
+                        Text,
+                        VoiceId: "Salli", // Specify the voice ID / name from the previous step.
+                }, res);
+        }
