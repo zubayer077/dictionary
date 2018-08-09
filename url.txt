@@ -1,0 +1,14 @@
+http://anti-code.com/blog/5-coolest-jsfiddles/
+
+https://chrome.google.com/webstore/detail/dhfmbjpmakffkpepaeeoenabldonnlee/publish-delayed
+
+First login wth chrome webstore username and password
+
+chrome webstore username: zubayer.extension
+password: same as MUN password
+
+then visit published chrome-extension url:
+https://chrome.google.com/webstore/detail/minishortcut/dhfmbjpmakffkpepaeeoenabldonnlee?hl=en
+
+previous allowed_origins
+"chrome-extension://nfkpmkbfmgbfongnfdihnmapmcdngcbd/"
