@@ -14,12 +14,6 @@ previous allowed_origins
 "chrome-extension://nfkpmkbfmgbfongnfdihnmapmcdngcbd/"
 
 
-// polly user password Y4GJY0Ch6TDl
-AWS.config = new AWS.Config({
-        accessKeyId: "AKIAIYSGUUET4LVGAD7Q",
-        secretAccessKey: "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",
-        region: "us-east-2"
-});
 
 var polly = new AWS.Polly();
 
